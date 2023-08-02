@@ -1,4 +1,4 @@
-set(current_target blank_slate)
+set(current_target wmcv-memory)
 
 add_executable(
     ${current_target} 

@@ -1,14 +1,14 @@
 include(gtest)
 
 add_executable(
-  blank-slate-test
+  wmcv-memory-test
   test_main.cpp
 )
 
 target_link_libraries(
-  blank-slate-test
+  wmcv-memory-test
   gtest_main
 )
 
 include(GoogleTest)
-gtest_discover_tests(blank-slate-test)
+gtest_discover_tests(wmcv-memory-test)
