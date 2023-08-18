@@ -1,30 +1,34 @@
-set(current_target wmcv-memory)
+add_library(wmcv-memory "" )
 
-add_executable(
-    ${current_target} 
-    main.cpp
+target_sources(
+    wmcv-memory PRIVATE
+        pch.h
+        wmcv_arena_allocator.cpp
 )
 
-CPMAddPackage("gh:fmtlib/fmt#10.0.0")
-target_link_libraries(${current_target} PRIVATE fmt::fmt)
-set_property(TARGET fmt PROPERTY FOLDER third_party/fmt)
+if( MSVC )
+    target_sources(wmcv-memory PRIVATE pch.cpp)
+endif()
+
+target_precompile_headers(wmcv-memory PRIVATE pch.h pch.cpp)
+source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${SOURCES})
 
 if( ENABLE_ALL_REASONABLE_WARNINGS )
     MESSAGE("-- Additional Warnings Enabled")
-    target_enable_warnings(${current_target})
+    target_enable_warnings(wmcv-memory)
 endif()
 
 if( ENABLE_WARNINGS_AS_ERRORS )
     MESSAGE("-- Warnings as Errors")
-    target_warnings_as_errors(${current_target})
+    target_warnings_as_errors(wmcv-memory)
 endif()
 
 if( ENABLE_SANITIZERS )
     MESSAGE("-- Sanitizers Enabled")
-    target_enable_sanitizers(${current_target})
+    target_enable_sanitizers(wmcv-memory)
 endif()
 
 if( ENABLE_STATIC_ANALYSIS )
     MESSAGE("-- Static Analysis Enabled")
-    target_enable_static_analysis(${current_target})
+    target_enable_static_analysis(wmcv-memory)
 endif()
