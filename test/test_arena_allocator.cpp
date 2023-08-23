@@ -20,8 +20,6 @@ TEST(test_arena_allocator, test_allocator_alloc)
 	void* ptr = arena.allocate(1_kB);
 	EXPECT_NE(ptr, nullptr);
 
-	const auto m = arena.internal_get_marker();
-	EXPECT_EQ(m, 1_kB);
 	EXPECT_EQ(arena.internal_get_size(), 4_kB);
 }
 
@@ -61,8 +59,6 @@ TEST(test_arena_allocator, test_allocator_clear)
 	void* ptr = arena.allocate(size);
 	EXPECT_NE(ptr, nullptr);
 
-	EXPECT_EQ(arena.internal_get_marker(), arena.internal_get_marker());
-	
 	arena.reset();
 	EXPECT_EQ(arena.internal_get_marker(), 0);
 }

@@ -22,14 +22,9 @@ namespace wmcv
 [[nodiscard]] constexpr auto align(uintptr_t address, size_t alignment) -> uintptr_t
 {
 	assert(is_power_of_two(alignment) && "Error: alignment isn't a power of 2");
-	const uintptr_t remainder = address & (alignment - 1);
-
-	if (remainder != 0)
-	{
-		address += alignment - remainder;
-	}
-
-	return address;
+	const uintptr_t mask = alignment - 1;
+	const uintptr_t result = ( address + mask ) & ~mask;
+	return result;
 }
 
 [[nodiscard]] constexpr auto is_aligned(size_t size, size_t alignment) -> bool
