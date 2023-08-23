@@ -44,7 +44,7 @@ void ArenaAllocator::free(void*) noexcept
 
 void ArenaAllocator::reset() noexcept
 {
-	m_marker = 0;
+	m_marker = 0llu;
 }
 
 }

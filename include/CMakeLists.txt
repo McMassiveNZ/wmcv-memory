@@ -2,6 +2,7 @@ target_sources(
     wmcv-memory
         PRIVATE
             wmcv_memory/wmcv_arena_allocator.h
+            wmcv_memory/wmcv_stack_allocator.h
             wmcv_memory/wmcv_allocator_utility.h
 )
 

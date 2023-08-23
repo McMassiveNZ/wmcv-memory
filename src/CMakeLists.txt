@@ -4,6 +4,7 @@ target_sources(
     wmcv-memory PRIVATE
         pch.h
         wmcv_arena_allocator.cpp
+        wmcv_stack_allocator.cpp
 )
 
 if( MSVC )

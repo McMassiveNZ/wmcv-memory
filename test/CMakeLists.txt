@@ -7,6 +7,7 @@ target_sources(
     PRIVATE
       test_pch.h
       test_arena_allocator.cpp
+      test_stack_allocator.cpp
       test_allocator_utility.cpp
 )
 
