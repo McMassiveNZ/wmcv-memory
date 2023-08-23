@@ -17,7 +17,7 @@ namespace wmcv
 		inline size_t internal_get_marker() const noexcept { return m_marker; }
 
 	private:
-		std::byte* m_memory;
+		uintptr_t m_baseAddress;
 		size_t m_size;
 		size_t m_marker;
 	};
