@@ -4,7 +4,7 @@
 
 TEST(test_stack_allocator, test_construct_allocator)
 {
-	std::array<std::byte, 4_kB> buffer;
+	std::array<std::byte, 4_kB> buffer = {};
 	wmcv::StackAllocator stack(buffer.data(), buffer.size());
 
 	EXPECT_EQ(stack.internal_get_current_marker(), 0);
@@ -14,7 +14,7 @@ TEST(test_stack_allocator, test_construct_allocator)
 
 TEST(test_stack_allocator, test_allocator_alloc)
 {
-	std::array<std::byte, 4_kB> buffer;
+	std::array<std::byte, 4_kB> buffer = {};
 	wmcv::StackAllocator stack(buffer.data(), buffer.size());
 
 	void* ptr = stack.allocate(1_kB);
@@ -26,7 +26,7 @@ TEST(test_stack_allocator, test_allocator_alloc)
 
 TEST(test_stack_allocator, test_allocator_free)
 {
-	std::array<std::byte, 4_kB> buffer;
+	std::array<std::byte, 4_kB> buffer = {};
 	wmcv::StackAllocator stack(buffer.data(), buffer.size());
 
 	void* ptr = stack.allocate(1_kB);
@@ -60,7 +60,7 @@ TEST(test_stack_allocator, test_allocator_alloc_aligned)
 
 TEST(test_stack_allocator, test_allocator_alloc_too_large)
 {
-	std::array<std::byte, 4_kB> buffer;
+	std::array<std::byte, 4_kB> buffer = {};
 	wmcv::StackAllocator stack(buffer.data(), buffer.size());
 
 	constexpr size_t size = 8_kB;
@@ -75,7 +75,7 @@ TEST(test_stack_allocator, test_allocator_alloc_too_large)
 
 TEST(test_stack_allocator, test_allocator_clear)
 {
-	std::array<std::byte, 4_kB> buffer;
+	std::array<std::byte, 4_kB> buffer = {};
 	wmcv::StackAllocator stack(buffer.data(), buffer.size());
 
 	constexpr size_t size = 2_kB;
