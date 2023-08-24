@@ -9,5 +9,6 @@
 #include <memory>
 #include <array>
 #include <span>
+#include <bit>
 
 #include <gtest/gtest.h>
