@@ -55,7 +55,7 @@ TEST(test_arena_allocator, test_allocator_clear)
 	std::array<std::byte, 4_kB> buffer = {};
 	wmcv::ArenaAllocator arena(buffer.data(), buffer.size());
 
-	constexpr size_t size = 4_kB;
+	constexpr size_t size = 2_kB;
 	void* ptr = arena.allocate(size);
 	EXPECT_NE(ptr, nullptr);
 

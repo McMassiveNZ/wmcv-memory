@@ -75,7 +75,8 @@ auto StackAllocator::allocate_aligned(size_t size, size_t alignment) noexcept ->
 	m_currentMarker += padding;
 
 	const uintptr_t next_addr = current_address + padding;
-	auto* const header = std::bit_cast<StackAllocationHeader*>(next_addr - sizeof(StackAllocationHeader));
+	void* header_address = address_to_ptr(next_addr - sizeof(StackAllocationHeader));
+	auto* const header = static_cast<StackAllocationHeader*>(header_address);
 	header->padding = padding;
 	header->previousOffset = m_previousMarker;
 
@@ -108,7 +109,7 @@ void StackAllocator::free(void* ptr) noexcept
 	}
 
 	const uintptr_t header_location = current_address - sizeof(StackAllocationHeader);
-	const auto* header = std::bit_cast<StackAllocationHeader*>(header_location);
+	const auto* header = static_cast<StackAllocationHeader*>(address_to_ptr(header_location));
 	const size_t previous_offset = current_address - header->padding - m_baseAddress;
 
 	if (previous_offset != header->previousOffset)
