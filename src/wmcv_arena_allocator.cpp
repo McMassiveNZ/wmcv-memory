@@ -8,19 +8,19 @@ namespace wmcv
 
 static constexpr size_t s_default_alignment = 16;
 
-ArenaAllocator::ArenaAllocator(std::byte* buffer, size_t size) noexcept
-	: m_baseAddress(ptr_to_address(buffer))
-	, m_size(size)
+ArenaAllocator::ArenaAllocator(Block block) noexcept
+	: m_baseAddress(block.address)
+	, m_size(block.size)
 	, m_marker(0llu)
 {
 }
 
-auto ArenaAllocator::allocate(size_t size) noexcept -> void*
+auto ArenaAllocator::allocate(size_t size) noexcept -> Block
 {
 	return allocate_aligned(size, s_default_alignment);
 }
 
-auto ArenaAllocator::allocate_aligned(size_t size, size_t alignment) noexcept -> void*
+auto ArenaAllocator::allocate_aligned(size_t size, size_t alignment) noexcept -> Block
 {
 	const uintptr_t curr_ptr = m_baseAddress + m_marker;
 	const uintptr_t offset = align(curr_ptr, alignment) - m_baseAddress;
@@ -29,13 +29,10 @@ auto ArenaAllocator::allocate_aligned(size_t size, size_t alignment) noexcept ->
 	{
 		const uintptr_t address = m_baseAddress + offset;
 		m_marker = offset + size;
-
-		void* ptr = address_to_ptr(address);
-		zero_memory(ptr, size);
-		return ptr;
+		return { .address = address, .size = size };
 	}
 
-	return nullptr;
+	return NullBlock();
 }
 
 void ArenaAllocator::free(void*) noexcept

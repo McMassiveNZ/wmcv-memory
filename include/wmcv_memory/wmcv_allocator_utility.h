@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WMCV_ALLOCATOR_UTILITY_H_INCLUDED
+#define WMCV_ALLOCATOR_UTILITY_H_INCLUDED
 
 namespace wmcv
 {
@@ -64,3 +65,5 @@ constexpr void zero_memory(void* ptr, size_t size) noexcept
 {
 	return size * 1024 * 1024 * 1024;
 }
+
+#endif //WMCV_ALLOCATOR_UTILITY_H_INCLUDED

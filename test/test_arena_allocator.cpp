@@ -3,62 +3,60 @@
 #include "wmcv_memory/wmcv_arena_allocator.h"
 #include "wmcv_memory/wmcv_allocator_utility.h"
 
-TEST(test_arena_allocator, test_construct_allocator)
-{
-	std::array<std::byte, 4_kB> buffer = {};
-	wmcv::ArenaAllocator arena(buffer.data(), buffer.size());
-
-	EXPECT_EQ(arena.internal_get_marker(), 0);
-	EXPECT_EQ(arena.internal_get_size(), 4_kB);
-}
-
 TEST(test_arena_allocator, test_allocator_alloc)
 {
-	std::array<std::byte, 4_kB> buffer = {};
-	wmcv::ArenaAllocator arena(buffer.data(), buffer.size());
+	wmcv::Block mem{.address = 0x00040000, .size = 4_kB};
+	wmcv::ArenaAllocator arena(mem);
 
-	void* ptr = arena.allocate(1_kB);
-	EXPECT_NE(ptr, nullptr);
+	auto result = arena.allocate(1_kB);
+	EXPECT_NE(result, wmcv::NullBlock());
 
-	EXPECT_EQ(arena.internal_get_size(), 4_kB);
+	EXPECT_EQ(result.address, 0x00040000);
+	EXPECT_EQ(result.size, 1_kB);
 }
 
 TEST(test_arena_allocator, test_allocator_alloc_aligned)
 {
-	std::array<std::byte, 4_kB> buffer = {};
-	wmcv::ArenaAllocator arena(buffer.data(), buffer.size());
+	wmcv::Block mem{.address = 0x00040007, .size = 4_kB};
+	wmcv::ArenaAllocator arena(mem);
 
 	constexpr size_t alignment = 32;
 	constexpr size_t size = 64;
 
-	void* ptr = arena.allocate_aligned(size, alignment);
-	EXPECT_NE(ptr, nullptr);
-	EXPECT_TRUE(wmcv::is_ptr_aligned(ptr, alignment));
+	auto result = arena.allocate_aligned(size, alignment);
+	EXPECT_NE(result, wmcv::NullBlock());
+	EXPECT_TRUE(wmcv::is_aligned(result.address, alignment));
+
+	result = arena.allocate_aligned(size, alignment);
+	EXPECT_NE(result, wmcv::NullBlock());
+	EXPECT_TRUE(wmcv::is_aligned(result.address, alignment));
 }
 
 TEST(test_arena_allocator, test_allocator_alloc_too_large)
 {
-	std::array<std::byte, 4_kB> buffer = {};
-	wmcv::ArenaAllocator arena(buffer.data(), buffer.size());
+	wmcv::Block mem{.address = 0x00040000, .size = 4_kB};
+	wmcv::ArenaAllocator arena(mem);
 
 	constexpr size_t size = 8_kB;
 
-	void* ptr = arena.allocate(size);
-	EXPECT_EQ(ptr, nullptr);
-
-	EXPECT_EQ(arena.internal_get_marker(), 0);
-	EXPECT_EQ(arena.internal_get_size(), 4_kB);
+	auto result = arena.allocate(size);
+	EXPECT_EQ(result, wmcv::NullBlock());
 }
 
 TEST(test_arena_allocator, test_allocator_clear)
 {
-	std::array<std::byte, 4_kB> buffer = {};
-	wmcv::ArenaAllocator arena(buffer.data(), buffer.size());
+	wmcv::Block mem{.address = 0x00040000, .size = 4_kB};
+	wmcv::ArenaAllocator arena(mem);
 
-	constexpr size_t size = 4_kB;
-	void* ptr = arena.allocate(size);
-	EXPECT_NE(ptr, nullptr);
+	constexpr size_t size = 3_kB;
+	auto block = arena.allocate(size);
+	EXPECT_NE(block, wmcv::NullBlock());
+
+	block = arena.allocate(size);
+	EXPECT_EQ(block, wmcv::NullBlock());
 
 	arena.reset();
-	EXPECT_EQ(arena.internal_get_marker(), 0);
+
+	block = arena.allocate(size);
+	EXPECT_NE(block, wmcv::NullBlock());
 }
