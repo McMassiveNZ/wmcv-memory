@@ -1,4 +1,5 @@
-#pragma once
+#ifndef WMCV_MEMORY_TEST_PCH_INCLUDED
+#define WMCV_MEMORY_TEST_PCH_INCLUDED
 
 #include <cinttypes>
 #include <cassert>
@@ -11,3 +12,5 @@
 #include <span>
 
 #include <gtest/gtest.h>
+
+#endif //WMCV_MEMORY_TEST_PCH_INCLUDED
