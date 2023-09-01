@@ -1,9 +1,10 @@
-#ifndef WMCV_MEMORY_TEST_PCH_INCLUDED
-#define WMCV_MEMORY_TEST_PCH_INCLUDED
+#ifndef WMCV_MEMORY_TEST_PCH_H_INCLUDED
+#define WMCV_MEMORY_TEST_PCH_H_INCLUDED
 
 #include <cinttypes>
 #include <cassert>
 #include <cstddef>
+#include <cstring>
 
 #include <type_traits>
 #include <algorithm>
@@ -13,4 +14,4 @@
 
 #include <gtest/gtest.h>
 
-#endif //WMCV_MEMORY_TEST_PCH_INCLUDED
+#endif //WMCV_MEMORY_TEST_PCH_H_INCLUDED
