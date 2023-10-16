@@ -29,7 +29,7 @@ auto StackAllocator::allocate(size_t size) noexcept -> Block
 	return allocate_aligned(size, s_default_alignment);
 }
 
-static size_t calc_padding_with_header(uintptr_t ptr, uintptr_t alignment) noexcept
+constexpr static size_t calc_padding_with_header(uintptr_t ptr, uintptr_t alignment) noexcept
 {
 	assert(is_power_of_two(alignment));
 
@@ -132,7 +132,7 @@ void StackAllocator::reset() noexcept
 	m_previousMarker = 0llu;
 }
 
-bool StackAllocator::owns_address(uintptr_t address) const noexcept
+auto StackAllocator::owns_address(uintptr_t address) const noexcept -> bool
 {
 	const uintptr_t start = m_baseAddress;
 	const uintptr_t end = start + uintptr_t{m_size};

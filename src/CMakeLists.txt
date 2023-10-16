@@ -5,6 +5,7 @@ target_sources(
         pch.h
         wmcv_arena_allocator.cpp
         wmcv_stack_allocator.cpp
+        wmcv_pool_allocator.cpp
 )
 
 if( MSVC )

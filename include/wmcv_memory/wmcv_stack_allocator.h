@@ -16,7 +16,7 @@ namespace wmcv
 		void reset() noexcept;
 	
 	private:
-		[[nodiscard]] bool owns_address(uintptr_t address) const noexcept;
+		[[nodiscard]] auto owns_address(uintptr_t address) const noexcept -> bool;
 
 		uintptr_t m_baseAddress;
 		size_t m_size;

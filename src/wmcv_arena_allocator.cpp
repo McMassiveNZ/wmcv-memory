@@ -6,8 +6,6 @@
 namespace wmcv
 {
 
-static constexpr size_t s_default_alignment = 16;
-
 ArenaAllocator::ArenaAllocator(Block block) noexcept
 	: m_baseAddress(block.address)
 	, m_size(block.size)
@@ -17,6 +15,7 @@ ArenaAllocator::ArenaAllocator(Block block) noexcept
 
 auto ArenaAllocator::allocate(size_t size) noexcept -> Block
 {
+	constexpr size_t s_default_alignment = 16;
 	return allocate_aligned(size, s_default_alignment);
 }
 
