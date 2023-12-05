@@ -14,7 +14,7 @@ struct FreeListAllocationHeader
 
 static_assert(std::is_standard_layout_v<FreeListAllocationHeader>, "FreeListAllocationHeader must be POD");
 
-static void sanity_check_nodes(void* before, void* after) noexcept
+static void sanity_check_nodes([[maybe_unused]] void* before, [[maybe_unused]] void* after) noexcept
 {
 	assert(ptr_to_address(before) < ptr_to_address(after) &&
 		   "before address is higher than"
