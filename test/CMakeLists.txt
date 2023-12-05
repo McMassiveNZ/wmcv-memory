@@ -11,7 +11,6 @@ target_sources(
       test_block_allocator.cpp
       test_freelist_first_fit_policy.cpp
       test_allocator_utility.cpp
-      test_intrusive_red_black_tree.cpp
 )
 
 if(MSVC)
