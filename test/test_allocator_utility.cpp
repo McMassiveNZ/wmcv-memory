@@ -62,3 +62,12 @@ TEST(test_allocator_utility, test_align_round_up)
 	EXPECT_EQ(wmcv::align(size_t{64}, size_t{16}), size_t{64});
 	EXPECT_EQ(wmcv::align(size_t{65}, size_t{16}), size_t{80});
 }
+
+TEST(test_allocator_utility, test_is_address_in_range)
+{
+	EXPECT_TRUE(wmcv::is_address_in_range(0, 0, 10));
+	EXPECT_TRUE(wmcv::is_address_in_range(5, 0, 10));
+
+	EXPECT_FALSE(wmcv::is_address_in_range(10, 0, 10));
+	EXPECT_FALSE(wmcv::is_address_in_range(50, 5, 10));
+}

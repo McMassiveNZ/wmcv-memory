@@ -35,7 +35,7 @@ namespace wmcv
 	return result;
 }
 
-[[nodiscard]] inline auto is_ptr_aligned(void* ptr, size_t alignment) -> bool
+[[nodiscard]] inline auto is_ptr_aligned(void* ptr, size_t alignment) noexcept -> bool
 {
 	assert(is_power_of_two(alignment) && "Error: alignment isn't a power of 2");
 	const uintptr_t uintptr = ptr_to_address(ptr);
@@ -43,10 +43,22 @@ namespace wmcv
 	return result;
 }
 
+[[nodiscard]] inline auto offset_ptr(void* ptr, size_t offset) noexcept -> void*
+{
+	const uintptr_t address = ptr_to_address(ptr);
+	const uintptr_t offset_address = address + offset;
+	return address_to_ptr(offset_address);
+}
+
 constexpr void zero_memory(void* ptr, size_t size) noexcept
 {
 	const std::span<std::byte> block(static_cast<std::byte*>(ptr), size);
 	std::fill(block.begin(), block.end(), std::byte{0});
+}
+
+[[nodiscard]] constexpr auto is_address_in_range(uintptr_t address, uintptr_t start, size_t length) -> bool
+{
+	return start <= address && address < (start + uintptr_t{length});
 }
 
 } // namespace wmcv

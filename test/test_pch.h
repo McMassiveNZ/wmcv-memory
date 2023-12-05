@@ -8,9 +8,13 @@
 
 #include <type_traits>
 #include <algorithm>
+#include <numeric>
+#include <ranges>
 #include <memory>
 #include <array>
 #include <span>
+#include <stack>
+#include <utility>
 
 #include <gtest/gtest.h>
 

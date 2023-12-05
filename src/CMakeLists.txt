@@ -5,7 +5,15 @@ target_sources(
         pch.h
         wmcv_arena_allocator.cpp
         wmcv_stack_allocator.cpp
-        wmcv_pool_allocator.cpp
+        wmcv_block_allocator.cpp
+        wmcv_allocator_padding.h
+        wmcv_allocator_padding.cpp
+        wmcv_freelist_first_fit_policy.h
+        wmcv_freelist_first_fit_policy.cpp
+        wmcv_freelist_best_fit_policy.h
+        wmcv_freelist_best_fit_policy.cpp
+        wmcv_intrusive_red_black_tree.h
+        wmcv_intrusive_red_black_tree.cpp
 )
 
 if( MSVC )

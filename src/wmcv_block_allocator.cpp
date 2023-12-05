@@ -1,23 +1,18 @@
 #include "pch.h"
 
-#include "wmcv_pool_allocator.h"
+#include "wmcv_block_allocator.h"
 #include "wmcv_allocator_utility.h"
 
 namespace wmcv
 {
-	struct PoolFreeListNode
-	{
-		PoolFreeListNode* next;
-	};
-
-	PoolAllocator::PoolAllocator(const Block block, size_t chunkSize, size_t chunkAlignment) noexcept
+	BlockAllocator::BlockAllocator(const Block block, size_t chunkSize, size_t chunkAlignment) noexcept
 	{
 		const auto start = align(block.address, chunkAlignment);
 		const auto size = block.size - size_t{start - block.address};
 
 		chunkSize = align(chunkSize, chunkAlignment);
 
-		assert(chunkSize >= sizeof(PoolFreeListNode) && "Chunk size is too small");
+		assert(chunkSize >= sizeof(BlockFreeListNode) && "Chunk size is too small");
 		assert(size >= chunkSize && "Memory in block is smaller than chunk size");
 
 		m_baseAddress = block.address;
@@ -28,9 +23,9 @@ namespace wmcv
 		reset();
 	}
 
-	[[nodiscard]] auto PoolAllocator::allocate() noexcept -> Block
+	[[nodiscard]] auto BlockAllocator::allocate() noexcept -> Block
 	{
-		PoolFreeListNode* node = static_cast<PoolFreeListNode*>(m_freeStore);
+		BlockFreeListNode* node = m_freeStore;
 		if (node == nullptr)
 		{
 			return NullBlock();
@@ -45,7 +40,7 @@ namespace wmcv
 		};
 	}
 
-	void PoolAllocator::free(void* ptr) noexcept
+	void BlockAllocator::free(void* ptr) noexcept
 	{
 		if (ptr)
 		{
@@ -57,31 +52,31 @@ namespace wmcv
 				return;
 			}
 
-			auto* node = static_cast<PoolFreeListNode*>(ptr);
-			node->next = static_cast<PoolFreeListNode*>(m_freeStore);
+			auto* node = static_cast<BlockFreeListNode*>(ptr);
+			node->next = m_freeStore;
 			m_freeStore = node;
 		}
 	}
 
-	void PoolAllocator::reset() noexcept
+	void BlockAllocator::reset() noexcept
 	{
 		const size_t chunk_count = m_size / m_chunkSize;
 
 		for (size_t i = 0; i < chunk_count; i++)
 		{
-			void* ptr = address_to_ptr(m_baseAddress + (i * m_chunkSize));
-			auto* node = static_cast<PoolFreeListNode*>(ptr);
+			const BlockFreeListNode nodeData = {};
 
-			node->next = static_cast<PoolFreeListNode*>(m_freeStore);
+			void* ptr = address_to_ptr(m_baseAddress + (i * m_chunkSize));
+			std::memcpy(ptr, &nodeData, sizeof(BlockFreeListNode));
+			auto* node = static_cast<BlockFreeListNode*>(ptr);
+
+			node->next = m_freeStore;
 			m_freeStore = node;
 		}
 	}
 
-	[[nodiscard]] auto PoolAllocator::owns_address(uintptr_t address) const noexcept -> bool
+	[[nodiscard]] auto BlockAllocator::owns_address(uintptr_t address) const noexcept -> bool
 	{
-		const uintptr_t start = m_baseAddress;
-		const uintptr_t end = start + uintptr_t{m_size};
-
-		return start <= address && address < end;
+		return is_address_in_range(address, m_baseAddress, m_size);
 	}
 }
