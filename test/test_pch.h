@@ -9,7 +9,6 @@
 #include <type_traits>
 #include <algorithm>
 #include <numeric>
-#include <ranges>
 #include <memory>
 #include <array>
 #include <span>

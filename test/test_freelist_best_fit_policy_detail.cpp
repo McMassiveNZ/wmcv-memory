@@ -263,8 +263,9 @@ TEST(test_bestfit_policy_detail, test_delete)
 
 	EXPECT_TRUE(wmcv::detail::ValidateRBProperties(root));
 
-	for (auto& node : nodes | std::views::reverse)
+	for ( auto itr = nodes.rbegin(); itr != nodes.rend(); ++itr)
 	{
+		auto& node = *itr;
 		wmcv::detail::Remove(root, &node);
 
 		if (root)
@@ -289,8 +290,9 @@ TEST(test_bestfit_policy_detail, test_insert_same_node_multiple_times)
 	
 	EXPECT_TRUE(wmcv::detail::ValidateRBProperties(root));
 
-	for (auto& node : nodes | std::views::reverse)
+	for ( auto itr = nodes.rbegin(); itr != nodes.rend(); ++itr)
 	{
+		auto& node = *itr;
 		wmcv::detail::Remove(root, &node);
 
 		if (root)
@@ -354,8 +356,9 @@ TEST(test_bestfit_policy_detail, test_list_node_insert_always_prepend)
 {
 	std::array<wmcv::detail::Node, 8> nodes{};
 	wmcv::detail::Node* head = nullptr;
-	for (auto& node : nodes | std::views::reverse)
+	for (auto itr = nodes.rbegin(); itr != nodes.rend(); ++itr)
 	{
+		auto& node = *itr;
 		wmcv::detail::ListInsert(head, &node);
 	}
 
@@ -402,8 +405,9 @@ TEST(test_bestfit_policy_detail, test_list_node_remove_always_pop_tail)
 		wmcv::detail::ListInsert(head, &node);
 	}
 
-	for (auto& node : nodes | std::views::reverse)
+	for (auto itr = nodes.rbegin(); itr != nodes.rend(); ++itr)
 	{
+		auto& node = *itr;
 		wmcv::detail::ListRemove(head, &node);
 		EXPECT_TRUE(wmcv::detail::ValidateListProperties(head));
 	}
