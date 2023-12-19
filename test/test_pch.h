@@ -20,6 +20,8 @@
 
 #ifdef _WIN32
 #include <Windows.h>
+#else
+#include <iostream>
 #endif
 
 #endif //WMCV_MEMORY_TEST_PCH_H_INCLUDED

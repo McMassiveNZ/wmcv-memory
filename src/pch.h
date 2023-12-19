@@ -13,6 +13,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#else
+#include <iostream>
 #endif
 
 #endif //WMCV_MEMORY_PCH_H_INCLUDED
