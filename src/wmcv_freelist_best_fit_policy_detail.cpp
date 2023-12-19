@@ -346,7 +346,7 @@ void DebugPrint(Node* node, size_t indent) noexcept
 		sprintf_s(buf, "B %llu\n", node->size);
 		OutputDebugStringA(buf);
 #else
-		std::cout << "B " << node->data << "\n";
+		std::cout << "B " << node->size << "\n";
 #endif
 	}
 
