@@ -124,7 +124,7 @@ TEST(test_bestfit_policy_detail, test_insert)
 
 	std::stack<wmcv::detail::Node*> in_order;
 	wmcv::detail::Node* curr = root;
-	int numPops = 0;
+	decltype(nodes)::size_type numPops = 0;
 
 	while ( curr != wmcv::detail::Node::SENTINEL() || !in_order.empty())
 	{

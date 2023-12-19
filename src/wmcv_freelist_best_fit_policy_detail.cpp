@@ -378,7 +378,7 @@ auto ValidateRBTBlackHeights(Node* root) noexcept -> bool
 
 	visitor::visit(root, 1, blackHeights);
 
-	const auto result = std::ranges::adjacent_find(blackHeights, std::not_equal_to<>());
+	const auto result = std::adjacent_find(blackHeights.begin(), blackHeights.end(), std::not_equal_to<>());
 	return result == blackHeights.end();
 }
 
@@ -409,7 +409,7 @@ auto ValidateRBTOrdering(Node* root) noexcept -> bool
 
 	visitor::visit(root, values);
 
-	const auto result = std::ranges::adjacent_find(values, std::greater<>());
+	const auto result = std::adjacent_find(values.begin(), values.end(), std::greater<>());
 	return result == values.end();
 }
 
@@ -547,7 +547,7 @@ auto ValidateListOrdering(Node* head) noexcept -> bool
 		curr = curr->next;
 	}
 
-	const auto result = std::ranges::adjacent_find(values, std::greater<>());
+	const auto result = std::adjacent_find(values.begin(), values.end(), std::greater<>());
 	return result == values.end();
 }
 
