@@ -18,4 +18,8 @@
 
 #include <gtest/gtest.h>
 
+#ifdef _WIN32
+#include <Windows.h>
+#endif
+
 #endif //WMCV_MEMORY_TEST_PCH_H_INCLUDED

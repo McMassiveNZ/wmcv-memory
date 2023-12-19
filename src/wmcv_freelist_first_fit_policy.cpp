@@ -37,7 +37,7 @@ static void WriteFreelistAllocationHeader(void* ptr, size_t size, size_t padding
 
 static auto ReadFreelistAllocationHeader(void* ptr) noexcept -> FreeListAllocationHeader
 {
-	const void* header_ptr = address_to_ptr(ptr_to_address(ptr) - sizeof(FreeListAllocationHeader));
+	const void* header_ptr = offset_ptr_back(ptr, sizeof(FreeListAllocationHeader));
 	FreeListAllocationHeader result;
 	std::memcpy(&result, header_ptr, sizeof(FreeListAllocationHeader));
 	return result;
@@ -71,7 +71,6 @@ auto FreeListFirstFitPolicy::allocate_aligned(size_t size, size_t alignment) noe
 		alignment = FreeListMinimumAlignment;
 	}
 
-	// Iterates the list and finds the first free block with enough space
 	FreeListBlock* curr = m_head;
 	FreeListBlock* prev = nullptr;
 
@@ -104,15 +103,12 @@ auto FreeListFirstFitPolicy::allocate_aligned(size_t size, size_t alignment) noe
 		const uintptr_t new_address = ptr_to_address(node) + required_space;
 		FreeListBlock* new_node = CreateFreeListBlock(new_address, remaining);
 
-		// insert the new node
 		insert_node(node, new_node);
 	}
 
-	// unlink the old node from the freelist
 	remove_node(prev, node);
 	m_used += required_space;
 
-	// Prep the memory we will return to the user
 	auto* memory = offset_ptr(node, alignment_padding);
 	assert(is_ptr_aligned(memory, alignment) && "ptr isn't aligned correctly");
 	WriteFreelistAllocationHeader(memory, required_space, alignment_padding);
@@ -202,7 +198,7 @@ auto FreeListFirstFitPolicy::insert_node(FreeListBlock* prev, FreeListBlock* nod
 	{
 		// The most common case where we are just inserting into the free list
 		sanity_check_nodes(prev, node);
-		assert(ptr_to_address(prev) &&
+		assert(owns_address(ptr_to_address(prev)) &&
 			   "Prev is outside the address space controlled"
 			   "by this allocator");
 

@@ -10,6 +10,8 @@ target_sources(
       test_stack_allocator.cpp
       test_block_allocator.cpp
       test_freelist_first_fit_policy.cpp
+      test_freelist_best_fit_policy.cpp
+      test_freelist_best_fit_policy_detail.cpp
       test_allocator_utility.cpp
 )
 

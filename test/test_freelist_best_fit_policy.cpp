@@ -1,24 +1,24 @@
 #include "test_pch.h"
-#include "wmcv_freelist_first_fit_policy.h"
+#include "wmcv_freelist_best_fit_policy.h"
 
 #include "wmcv_memory/wmcv_allocator_utility.h"
 #include "wmcv_memory/wmcv_memory_block.h"
 
-TEST(test_freelist_first_fit_policy, test_allocator_alloc)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freelist(mem);
+	wmcv::FreeListBestFitPolicy freelist(mem);
 
 	auto result = freelist.allocate(1_kB);
 	EXPECT_NE(result, wmcv::NullBlock());
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_free)
+TEST(test_freelist_best_fit_policy, test_allocator_free)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
 	auto result = freeList.allocate(1_kB);
 	EXPECT_NE(result, wmcv::NullBlock());
@@ -32,11 +32,11 @@ TEST(test_freelist_first_fit_policy, test_allocator_free)
 	EXPECT_EQ(expected, result);
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_alloc_aligned)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc_aligned)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
 	constexpr size_t alignment = 16;
 	constexpr size_t size = 64;
@@ -54,11 +54,11 @@ TEST(test_freelist_first_fit_policy, test_allocator_alloc_aligned)
 	EXPECT_EQ(expected, result);
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_alloc_too_large)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc_too_large)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
 	constexpr size_t size = 8_kB;
 
@@ -66,11 +66,11 @@ TEST(test_freelist_first_fit_policy, test_allocator_alloc_too_large)
 	EXPECT_EQ(result, wmcv::NullBlock());
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_oom_from_many_allocs)
+TEST(test_freelist_best_fit_policy, test_allocator_oom_from_many_allocs)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
 	constexpr size_t size = 1_kB;
 
@@ -87,11 +87,11 @@ TEST(test_freelist_first_fit_policy, test_allocator_oom_from_many_allocs)
 	EXPECT_EQ(result, wmcv::NullBlock());
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_reset)
+TEST(test_freelist_best_fit_policy, test_allocator_reset)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
 	constexpr size_t size = 3_kB;
 	auto result = freeList.allocate(size);
@@ -106,15 +106,15 @@ TEST(test_freelist_first_fit_policy, test_allocator_reset)
 	EXPECT_NE(result, wmcv::NullBlock());
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_alloc_twice_and_free_each)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc_twice_and_free_each)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
-	constexpr size_t size = 2_kB - 16;
+	constexpr size_t size = 1_kB - 16;
 
-	std::array<wmcv::Block, 2> allocs = {};
+	std::array<wmcv::Block, 4> allocs = {};
 
 	for ( auto& block : allocs )
 	{
@@ -142,15 +142,15 @@ TEST(test_freelist_first_fit_policy, test_allocator_alloc_twice_and_free_each)
 	EXPECT_NE(block, wmcv::NullBlock());
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_multiple_times_interleaved_same_size_odd)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc_and_free_multiple_times_interleaved_same_size_odd)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
-	constexpr size_t size = 8;
+	constexpr size_t size = 64 - 16;
 
-	std::array<wmcv::Block, 128> allocs = {};
+	std::array<wmcv::Block, 64> allocs = {};
 
 	for ( auto& block : allocs )
 	{
@@ -166,7 +166,8 @@ TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_multiple_time
 	{
 		if (count % 2 != 0)
 		{
-			freeList.free(wmcv::address_to_ptr(block.address));
+			void* ptr = wmcv::address_to_ptr(block.address);
+			freeList.free(ptr);
 			block = wmcv::NullBlock();
 		}
 		++count;
@@ -185,15 +186,15 @@ TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_multiple_time
 	}
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_multiple_times_interleaved_same_size_even)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc_and_free_multiple_times_interleaved_same_size_even)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
-	constexpr size_t size = 8;
+	constexpr size_t size = 64 - 16;
 
-	std::array<wmcv::Block, 128> allocs = {};
+	std::array<wmcv::Block, 64> allocs = {};
 
 	for ( auto& block : allocs )
 	{
@@ -228,12 +229,11 @@ TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_multiple_time
 	}
 }
 
-
-TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_coalesce)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc_and_free_coalesce)
 {
 	std::array<std::byte, 4_kB> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
 	constexpr size_t size = 1_kB - 16;
 	constexpr size_t large_alloc = 3_kB - 16;
@@ -284,11 +284,11 @@ TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_coalesce)
 	}
 }
 
-TEST(test_freelist_first_fit_policy, test_allocator_alloc_and_free_typical_use_case)
+TEST(test_freelist_best_fit_policy, test_allocator_alloc_and_free_typical_use_case)
 {
 	std::array<std::byte, 512> memory = {};
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
-	wmcv::FreeListFirstFitPolicy freeList(mem);
+	wmcv::FreeListBestFitPolicy freeList(mem);
 
 	std::array<size_t, 8> alloc_sizes = { 38, 122, 16, 80, 172, 62, 10, 12 };
 	EXPECT_EQ(std::accumulate(alloc_sizes.begin(), alloc_sizes.end(), 0llu), memory.size());

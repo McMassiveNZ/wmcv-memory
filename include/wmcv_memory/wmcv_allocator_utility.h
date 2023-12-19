@@ -50,6 +50,13 @@ namespace wmcv
 	return address_to_ptr(offset_address);
 }
 
+[[nodiscard]] inline auto offset_ptr_back(void* ptr, size_t offset) noexcept -> void*
+{
+	const uintptr_t address = ptr_to_address(ptr);
+	const uintptr_t offset_address = address - offset;
+	return address_to_ptr(offset_address);
+}
+
 constexpr void zero_memory(void* ptr, size_t size) noexcept
 {
 	const std::span<std::byte> block(static_cast<std::byte*>(ptr), size);

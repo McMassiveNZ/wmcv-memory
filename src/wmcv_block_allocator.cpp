@@ -5,20 +5,27 @@
 
 namespace wmcv
 {
-	BlockAllocator::BlockAllocator(const Block block, size_t chunkSize, size_t chunkAlignment) noexcept
+	constexpr static auto ComputeFreeStoreSize(const Block block, const size_t alignment) noexcept -> size_t
 	{
-		const auto start = align(block.address, chunkAlignment);
+		const auto start = align(block.address, alignment);
 		const auto size = block.size - size_t{start - block.address};
+		return size;
+	}
 
-		chunkSize = align(chunkSize, chunkAlignment);
+	constexpr static auto ComputeChunkSize(size_t size, const size_t alignment) noexcept -> size_t
+	{
+		const auto result = align(size, alignment);
+		return result;
+	}
 
-		assert(chunkSize >= sizeof(BlockFreeListNode) && "Chunk size is too small");
-		assert(size >= chunkSize && "Memory in block is smaller than chunk size");
-
-		m_baseAddress = block.address;
-		m_size = size;
-		m_chunkSize = chunkSize;
-		m_freeStore = nullptr;
+	BlockAllocator::BlockAllocator(const Block block, size_t chunkSize, size_t chunkAlignment) noexcept
+		: m_baseAddress(block.address)
+		, m_size(ComputeFreeStoreSize(block, chunkAlignment))
+		, m_chunkSize(ComputeChunkSize(chunkSize, chunkAlignment))
+		, m_freeStore(nullptr)
+	{
+		assert(m_chunkSize >= sizeof(BlockFreeListNode) && "Chunk size is too small");
+		assert(m_size >= m_chunkSize && "Memory in block is smaller than chunk size");
 
 		reset();
 	}

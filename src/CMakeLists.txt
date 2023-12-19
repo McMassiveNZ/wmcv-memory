@@ -10,6 +10,10 @@ target_sources(
         wmcv_allocator_padding.cpp
         wmcv_freelist_first_fit_policy.h
         wmcv_freelist_first_fit_policy.cpp
+        wmcv_freelist_best_fit_policy.h
+        wmcv_freelist_best_fit_policy.cpp
+        wmcv_freelist_best_fit_policy_detail.h
+        wmcv_freelist_best_fit_policy_detail.cpp
 )
 
 if( MSVC )
