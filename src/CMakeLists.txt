@@ -6,6 +6,7 @@ target_sources(
         wmcv_arena_allocator.cpp
         wmcv_stack_allocator.cpp
         wmcv_block_allocator.cpp
+        wmcv_buddy_allocator.cpp
         wmcv_allocator_padding.h
         wmcv_allocator_padding.cpp
         wmcv_freelist_first_fit_policy.h

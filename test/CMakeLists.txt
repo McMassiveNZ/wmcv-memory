@@ -9,6 +9,7 @@ target_sources(
       test_arena_allocator.cpp
       test_stack_allocator.cpp
       test_block_allocator.cpp
+      test_buddy_allocator.cpp
       test_freelist_first_fit_policy.cpp
       test_freelist_best_fit_policy.cpp
       test_freelist_best_fit_policy_detail.cpp
