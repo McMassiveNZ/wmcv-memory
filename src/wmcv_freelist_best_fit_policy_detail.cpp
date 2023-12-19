@@ -445,7 +445,7 @@ auto ValidateRBTRedChildren(Node* root) noexcept -> bool
 	visitor::visit(root, values);
 
 	constexpr auto is_true = [](bool b){ return b; };
-	return std::ranges::all_of(values, is_true);
+	return std::all_of(values.begin(), values.end(), is_true);
 }
 
 auto ValidateRBProperties(Node* root) noexcept -> bool
