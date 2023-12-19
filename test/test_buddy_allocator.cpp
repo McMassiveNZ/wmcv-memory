@@ -99,7 +99,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_one_small_then_one_large)
 
 	std::array<wmcv::Block, 2> allocs = {};
 
-	for ( int i = 0; i < allocs.size(); ++i)
+	for ( size_t i = 0; i < allocs.size(); ++i)
 	{
 		auto& block = allocs[i];
 		block = buddy.allocate(size + i*size);
