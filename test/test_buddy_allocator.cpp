@@ -6,7 +6,7 @@
 
 TEST(test_buddy_allocator, test_allocator_alloc)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -17,7 +17,7 @@ TEST(test_buddy_allocator, test_allocator_alloc)
 
 TEST(test_buddy_allocator, test_allocator_free)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	constexpr size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -38,7 +38,7 @@ TEST(test_buddy_allocator, test_allocator_free)
 
 TEST(test_buddy_allocator, test_allocator_alloc_too_large)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -51,7 +51,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_too_large)
 
 TEST(test_buddy_allocator, test_allocator_oom_from_many_allocs)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -70,7 +70,7 @@ TEST(test_buddy_allocator, test_allocator_oom_from_many_allocs)
 
 TEST(test_buddy_allocator, test_allocator_reset)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -90,7 +90,7 @@ TEST(test_buddy_allocator, test_allocator_reset)
 
 TEST(test_buddy_allocator, test_allocator_alloc_one_small_then_one_large)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -109,7 +109,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_one_small_then_one_large)
 
 TEST(test_buddy_allocator, test_allocator_alloc_one_large_then_one_small)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -134,7 +134,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_one_large_then_one_small)
 
 TEST(test_buddy_allocator, test_allocator_alloc_twice_and_free_each)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -171,7 +171,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_twice_and_free_each)
 
 TEST(test_buddy_allocator, test_allocator_alloc_and_free_multiple_times_interleaved_same_size_odd)
 {
-	std::array<std::byte, 8_kB> memory = {};
+	alignas(16) std::array<std::byte, 8_kB> memory = {};
 	constexpr size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -215,7 +215,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_and_free_multiple_times_interlea
 
 TEST(test_buddy_allocator, test_allocator_alloc_and_free_multiple_times_interleaved_same_size_even)
 {
-	std::array<std::byte, 8_kB> memory = {};
+	alignas(16) std::array<std::byte, 8_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -259,7 +259,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_and_free_multiple_times_interlea
 
 TEST(test_buddy_allocator, test_allocator_alloc_small_size_and_free_last)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -282,7 +282,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_small_size_and_free_last)
 
 TEST(test_buddy_allocator, test_allocator_alloc_and_free_coalesce)
 {
-	std::array<std::byte, 4_kB> memory = {};
+	alignas(16) std::array<std::byte, 4_kB> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
@@ -338,7 +338,7 @@ TEST(test_buddy_allocator, test_allocator_alloc_and_free_coalesce)
 
 TEST(test_buddy_allocator, test_allocator_alloc_and_free_typical_use_case)
 {
-	std::array<std::byte, 512> memory = {};
+	alignas(16) std::array<std::byte, 512> memory = {};
 	const size_t alignment = 16;
 	wmcv::Block mem{.address = wmcv::ptr_to_address(memory.data()), .size = memory.size()};
 	wmcv::BuddyAllocator buddy(mem, alignment);
