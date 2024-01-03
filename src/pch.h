@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <span>
 #include <vector>
+#include <atomic>
+#include <thread>
 
 #ifdef _WIN32
 #include <windows.h>

@@ -4,8 +4,10 @@ target_sources(
     wmcv-memory PRIVATE
         pch.h
         wmcv_arena_allocator.cpp
+        wmcv_lockless_arena_allocator.cpp
         wmcv_stack_allocator.cpp
         wmcv_block_allocator.cpp
+        wmcv_lockless_block_allocator.cpp
         wmcv_buddy_allocator.cpp
         wmcv_allocator_padding.h
         wmcv_allocator_padding.cpp

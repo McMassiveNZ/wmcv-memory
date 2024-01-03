@@ -7,8 +7,10 @@ target_sources(
     PRIVATE
       test_pch.h
       test_arena_allocator.cpp
+      test_lockless_arena_allocator.cpp
       test_stack_allocator.cpp
       test_block_allocator.cpp
+      test_lockless_block_allocator.cpp
       test_buddy_allocator.cpp
       test_freelist_first_fit_policy.cpp
       test_freelist_best_fit_policy.cpp
