@@ -24,19 +24,19 @@ TEST(test_lockless_block_allocator, test_allocator_alloc_from_multiple_threads)
 	const size_t chunk_size = buffer.size() / num_threads;
 	wmcv::LocklessBlockAllocator pool(mem, chunk_size, chunk_alignment);
 
-	std::vector<std::jthread> threads;
+	std::vector<std::thread> threads;
 	std::vector<wmcv::Block> blocks(num_threads);
 
 	for (size_t i = 0; i < num_threads; ++i)
 	{
-		threads.emplace_back([&pool, &blocks, i]
+		auto& t = threads.emplace_back([&pool, &blocks, i]
 		{
 			auto block = pool.allocate();
 			blocks[i] = block;
 		});
-	}
 
-	threads.clear();
+		t.join();
+	}
 
 	std::sort(blocks.begin(), blocks.end());
 
@@ -82,19 +82,19 @@ TEST(test_lockless_block_allocator, test_allocator_alloc_not_enough_space_from_m
 	wmcv::Block mem{.address = wmcv::ptr_to_address(buffer.data()), .size = buffer.size()};
 	wmcv::LocklessBlockAllocator pool(mem, 1_kB, chunk_alignment);
 
-	std::vector<std::jthread> threads;
+	std::vector<std::thread> threads;
 	std::vector<wmcv::Block> blocks(5);
 
 	for (size_t i = 0; i < blocks.size(); ++i)
 	{
-		threads.emplace_back([&pool, &blocks, i]
+		auto& t = threads.emplace_back([&pool, &blocks, i]
 		{
 			auto block = pool.allocate();
 			blocks[i] = block;
 		});
-	}
 
-	threads.clear();
+		t.join();
+	}
 
 	const size_t result = std::count(blocks.begin(), blocks.end(), wmcv::NullBlock());
 
