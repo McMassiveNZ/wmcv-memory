@@ -14,6 +14,7 @@
 #include <span>
 #include <stack>
 #include <utility>
+#include <thread>
 
 #include <gtest/gtest.h>
 

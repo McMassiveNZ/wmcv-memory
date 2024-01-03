@@ -96,9 +96,9 @@ TEST(test_lockless_block_allocator, test_allocator_alloc_not_enough_space_from_m
 		t.join();
 	}
 
-	const size_t result = std::count(blocks.begin(), blocks.end(), wmcv::NullBlock());
+	const auto result = std::count(blocks.begin(), blocks.end(), wmcv::NullBlock());
 
-	EXPECT_EQ(result, 1);
+	EXPECT_EQ(result, decltype(result){1});
 
 	std::sort(blocks.begin(), blocks.end());
 
