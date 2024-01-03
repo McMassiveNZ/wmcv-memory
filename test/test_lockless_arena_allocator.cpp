@@ -23,19 +23,24 @@ TEST(test_lockless_arena_allocator, test_allocator_alloc_from_multiple_threads)
 	const size_t num_threads = std::thread::hardware_concurrency();
 	const size_t alloc_size = (1_kB / num_threads);
 
-	std::vector<std::thread> threads;
+	std::vector<std::jthread> threads;
 	std::vector<wmcv::Block> blocks(num_threads);
+	std::atomic_int numThreadsStarted = 0;
 
 	for (size_t i = 0; i < num_threads; ++i)
 	{
-		auto& t = threads.emplace_back([&arena, &blocks, i, alloc_size]
+		threads.emplace_back([&arena, &blocks, &numThreadsStarted, i, alloc_size]
 		{
+			numThreadsStarted.fetch_add(1);
+			while (numThreadsStarted.load() < blocks.size())
+				;
+
 			auto block = arena.allocate(alloc_size);
 			blocks[i] = block;
 		});
-
-		t.join();
 	}
+
+	threads.clear();
 
 	std::sort(blocks.begin(), blocks.end());
 
